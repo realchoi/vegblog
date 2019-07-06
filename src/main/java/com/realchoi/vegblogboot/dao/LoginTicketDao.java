@@ -26,6 +26,15 @@ public interface LoginTicketDao {
     LoginTicket findLoginTicketById(@Param("id") String id);
 
     /**
+     * 根据登录凭证查找用户凭证
+     *
+     * @param ticket 登录凭证
+     * @return 用户凭证信息
+     */
+    @Select("SELECT * FROM loginticket WHERE ticket = #{ticket}")
+    LoginTicket findLoginTicketByTicket(@Param("ticket") String ticket);
+
+    /**
      * 新增用户凭证
      *
      * @param loginTicket 用户凭证信息

@@ -64,4 +64,23 @@ public class LoginTicketService {
         resultMap.put("ticket", loginTicket);
         return resultMap;
     }
+
+    /**
+     * 根据登录凭证查找用户凭证
+     *
+     * @param ticket 登录凭证
+     * @return 包含用户凭证信息的 Map
+     */
+    public Map findLoginTicketByTicket(String ticket) {
+        Map<String, Object> resultMap = new HashMap<>();
+        LoginTicket loginTicket = this.loginTicketDao.findLoginTicketByTicket(ticket);
+        if (loginTicket != null) {
+            resultMap.put("code", 0);
+            resultMap.put("ticket", loginTicket);
+        } else {
+            resultMap.put("code", -1);
+            resultMap.put("msg", "未找到用户登录凭证。");
+        }
+        return resultMap;
+    }
 }
