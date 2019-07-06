@@ -1,0 +1,34 @@
+server:
+  port: 8006
+
+website:
+  description: "This is my first springboot application."
+  name: "Vegbot Blog"
+  url: "realchoi.com"
+
+spring:
+  datasource:
+    name: vegblogboot
+    url: jdbc:mysql://148.70.40.213:3306/vegblogboot
+    username: root
+    password: 88888887
+    # driver-class-name: com.mysql.cj.jdbc.Driver:
+    # 使用 druid 数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      filters: stat
+      maxActive: 20
+      initialSize: 1
+      maxWait: 60000
+      minIdle: 1
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: select 'x'
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      maxOpenPreparedStatements: 20
+
+# mybatis:
+  # mapper-locations: classpath:mybatis-config.xml

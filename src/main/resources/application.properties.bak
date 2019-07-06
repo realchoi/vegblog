@@ -1,0 +1,4 @@
+server.port=8006
+website.name="Choi's Blog"
+website.description="My first springboot application"
+website.url="realchoi.com"
