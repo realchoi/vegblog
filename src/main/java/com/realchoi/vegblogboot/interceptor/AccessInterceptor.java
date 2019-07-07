@@ -2,8 +2,10 @@ package com.realchoi.vegblogboot.interceptor;
 
 import com.realchoi.vegblogboot.model.LoginTicket;
 import com.realchoi.vegblogboot.model.User;
+import com.realchoi.vegblogboot.model.common.Result;
 import com.realchoi.vegblogboot.service.LoginTicketService;
 import com.realchoi.vegblogboot.service.UserService;
+import com.realchoi.vegblogboot.util.SendMessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -36,9 +38,20 @@ public class AccessInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        /*
+         * 配置跨域
+         */
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PATCH, DELETE, PUT");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+        // 查询登录用户信息
         loadUserInfo(request);
         if (user == null) {
-            response.sendRedirect("/user/login");
+            // 如果从 cookie 中未找到用户信息，则直接返回提示信息
+            SendMessageUtil.sendJsonMessage(response, new Result(-101, "用户未登录。"));
         }
         return true;
     }
@@ -65,7 +78,7 @@ public class AccessInterceptor implements HandlerInterceptor {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                // 如果 cookie 有效，则
+                // 如果 cookie 有效，则利用该 cookie 获取登录凭证 ticket
                 if ("ticket".equals(cookie.getName())) {
                     ticket = cookie.getValue();
                     break;
@@ -78,7 +91,7 @@ public class AccessInterceptor implements HandlerInterceptor {
             Map resultMap = this.loginTicketService.findLoginTicketByTicket(ticket);
             if (resultMap.get("ticket") != null) {
                 LoginTicket loginTicket = (LoginTicket) resultMap.get("ticket");
-                // 登录凭证未失效，切状态正常
+                // 登录凭证未失效，且状态正常
                 if (loginTicket.getExpired().after(new Date()) && loginTicket.getStatus() == 0) {
                     user = userService.findUserById(loginTicket.getUserId());
                 }

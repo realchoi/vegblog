@@ -14,9 +14,6 @@ import java.util.Map;
 
 import static java.lang.Math.toIntExact;
 
-/**
- *
- */
 @RestController
 @RequestMapping("/user")
 public class UserController {

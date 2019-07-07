@@ -5,6 +5,14 @@ package com.realchoi.vegblogboot.model.common;
  */
 public class Result {
 
+    public Result() {
+    }
+
+    public Result(int code, String message) {
+        this.code = code;
+        this.message = message;
+    }
+
     public int getCode() {
         return code;
     }
@@ -25,7 +33,7 @@ public class Result {
     }
 
     /**
-     * 结果代码
+     * 结果代码（值域：0-成功；-1-失败；-101-未登录）
      */
     private int code = 0;
 
