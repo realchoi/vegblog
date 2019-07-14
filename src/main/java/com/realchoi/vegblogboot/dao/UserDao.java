@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * 用户数据操作类
+ */
 @Mapper
 @Repository
 public interface UserDao {

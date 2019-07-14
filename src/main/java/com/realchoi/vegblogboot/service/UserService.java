@@ -30,7 +30,7 @@ public class UserService {
      *
      * @return 所有用户信息
      */
-    public List<User> findAllAuthors() {
+    public List<User> findAllUsers() {
         return userDao.findAllUsers();
     }
 

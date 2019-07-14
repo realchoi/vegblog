@@ -47,7 +47,7 @@ public interface LoginTicketDao {
      *
      * @param loginTicket 凭证信息
      */
-    @Update("UPDATE loginTicket SET expired = #{expired}, status = #{status} WHERE id = #{id}")
+    @Update("UPDATE loginTicket SET expired = #{expired}, status = #{status}, ticket = #{ticket} WHERE id = #{id}")
     void updateLoginTicket(LoginTicket loginTicket);
 
     /**

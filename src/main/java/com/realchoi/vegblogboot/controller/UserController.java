@@ -78,14 +78,13 @@ public class UserController {
     }
 
     @GetMapping("all")
-    public List<User> findAllAuthors() {
-        return userService.findAllAuthors();
+    public List<User> findAllUsers() {
+        return userService.findAllUsers();
     }
 
     @GetMapping("find")
-    public User findAuthorById(String id) {
+    public User findUserById(String id) {
         return userService.findUserById(id);
     }
-
 
 }
