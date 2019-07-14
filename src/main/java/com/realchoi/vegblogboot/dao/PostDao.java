@@ -1,10 +1,7 @@
 package com.realchoi.vegblogboot.dao;
 
 import com.realchoi.vegblogboot.model.Post;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -57,4 +54,17 @@ public interface PostDao {
      */
     @Select("SELECT * FROM post WHERE id = #{id}")
     Post findPostById(@Param("id") String id);
+
+    @Update("UPDATE post SET title = #{title}, content = #{content}, updateTime = #{updateTime}, category = #{category}, tag = #{tag} WHERE id = #{id}")
+    boolean updatePost(Post post);
+
+
+    /**
+     * 查询文章总数
+     *
+     * @param id 文章 ID
+     * @return
+     */
+    @Delete("DELETE FROM post WHERE id = #{id}")
+    boolean deletePostById(@Param("id") String id);
 }

@@ -52,8 +52,37 @@ public class PostController {
         return postService.insertPost(post);
     }
 
-    @GetMapping("detail")
+    /**
+     * 查询文章详细信息
+     *
+     * @param id 文章 ID
+     * @return
+     */
+    @GetMapping("/detail")
     public Result findPostById(String id) {
         return postService.findPostById(id);
+    }
+
+    /**
+     * 编辑文章内容
+     *
+     * @param post 文章信息
+     * @return
+     */
+    @PostMapping("/edit")
+    public Result updatePost(@RequestBody Post post) {
+        return postService.updatePost(post);
+    }
+
+
+    /**
+     * 删除文章
+     *
+     * @param post 文章信息
+     * @return
+     */
+    @PostMapping("/delete")
+    public Result deletePostById(@RequestBody Post post) {
+        return postService.deletePostById(post);
     }
 }

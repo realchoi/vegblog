@@ -52,15 +52,8 @@ public class PostService {
      * @return 发布成功 or 失败
      */
     public Result insertPost(Post post) {
-        Result result = new Result(0, "OK");
-        if (StringUtils.isEmpty(post.getTitle())) {
-            result.setCode(-1);
-            result.setMessage("文章标题不能为空。");
-            return result;
-        }
-        if (StringUtils.isEmpty(post.getContent())) {
-            result.setCode(-1);
-            result.setMessage("文章内容不能为空。");
+        Result result = checkPostRequired(post);
+        if (result.getCode() == -1) {
             return result;
         }
         // 随机生成 ID
@@ -74,7 +67,7 @@ public class PostService {
         post.setUpdateTime(new Date());
         // 文章的摘要默认从内容中截取 200 字符
         // todo: 后续可以在配置文件中决定文章摘要显示的字数
-        post.setSummary(post.getContent().substring(0, 200));
+        // post.setSummary(post.getContent().substring(0, 400));
 
         // 插入数据库
         if (postDao.insertPost(post)) {
@@ -102,6 +95,72 @@ public class PostService {
         } else {
             result.setCode(-1);
             result.setMessage("未找到文章。");
+        }
+        return result;
+    }
+
+
+    /**
+     * 编辑文章
+     * @param post 文章信息
+     * @return
+     */
+    public Result updatePost(Post post) {
+        Result result = checkPostRequired(post);
+        if (result.getCode() == -1) {
+            return result;
+        }
+        // 文章的更新时间默认为当前时间
+        post.setUpdateTime(new Date());
+        // 文章的摘要默认从内容中截取 200 字符
+        // todo: 后续可以在配置文件中决定文章摘要显示的字数
+        // post.setSummary(post.getContent().substring(0, 400));
+        // 修改数据库
+        if (postDao.updatePost(post)) {
+            // 成功则返回文章的 ID
+            result.setData(post.getId());
+        } else {
+            result.setCode(-1);
+            result.setMessage("编辑失败。");
+        }
+        return result;
+    }
+
+    /**
+     * 删除文章
+     *
+     * @param post 文章信息
+     * @return
+     */
+    public Result deletePostById(Post post) {
+        Result result = new Result(0, "OK");
+        if(postDao.deletePostById(post.getId())){
+            result.setData(true);
+        }else {
+            result.setCode(-1);
+            result.setMessage("删除失败。");
+        }
+        return result;
+    }
+
+
+    /**
+     * 检查文章的必填项
+     *
+     * @param post 文章信息
+     * @return
+     */
+    private Result checkPostRequired(Post post) {
+        Result result = new Result(0, "OK");
+        if (StringUtils.isEmpty(post.getTitle())) {
+            result.setCode(-1);
+            result.setMessage("文章标题不能为空。");
+            return result;
+        }
+        if (StringUtils.isEmpty(post.getContent())) {
+            result.setCode(-1);
+            result.setMessage("文章内容不能为空。");
+            return result;
         }
         return result;
     }

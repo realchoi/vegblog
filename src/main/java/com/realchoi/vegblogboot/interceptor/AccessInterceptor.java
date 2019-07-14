@@ -48,11 +48,10 @@ public class AccessInterceptor implements HandlerInterceptor {
         if (user == null) {
             // 如果从 cookie 中未找到用户信息，则直接返回提示信息
             SendMessageUtil.sendJsonMessage(response, new Result(-101, "用户未登录。"));
-        }
-        /*else {
+        } else if ("/user/getUserInfo".equals(request.getRequestURI())) {
             // 如果从 cookie 中找到用户信息，则直接返回提示信息
             SendMessageUtil.sendJsonMessage(response, new Result(0, "用户已登录。"));
-        }*/
+        }
         return true;
     }
 

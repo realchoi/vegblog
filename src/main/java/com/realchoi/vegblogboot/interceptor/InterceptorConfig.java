@@ -35,7 +35,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册访问拦截器
-        registry.addInterceptor(accessInterceptor).addPathPatterns("/post/create", "/post/edit");
+        registry.addInterceptor(accessInterceptor).addPathPatterns("/user/getUserInfo", "/post/create", "/post/edit");
     }
 
     /**
