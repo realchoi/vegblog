@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * 文章数据操作类
+ * 文章数据操作接口
  */
 @Mapper
 @Repository
@@ -43,7 +43,7 @@ public interface PostDao {
      * @param post 文章信息
      * @return 发布成功 or 失败
      */
-    @Insert("INSERT INTO post VALUES(#{id}, #{title}, #{userId}, #{publishTime}, #{updateTime}, #{summary}, #{content}, #{category}, #{tag}, #{readTimes}, #{commentCount}, #{likeCount}, #{imageUrl})")
+    @Insert("INSERT INTO post VALUES(#{id}, #{title}, #{userId}, #{publishTime}, #{updateTime}, #{mdText}, #{content}, #{readTimes}, #{commentCount}, #{likeCount}, #{imageUrl})")
     boolean insertPost(Post post);
 
     /**
@@ -55,7 +55,7 @@ public interface PostDao {
     @Select("SELECT * FROM post WHERE id = #{id}")
     Post findPostById(@Param("id") String id);
 
-    @Update("UPDATE post SET title = #{title}, content = #{content}, updateTime = #{updateTime}, category = #{category}, tag = #{tag} WHERE id = #{id}")
+    @Update("UPDATE post SET title = #{title}, content = #{content}, mdText = #{mdText}, updateTime = #{updateTime} WHERE id = #{id}")
     boolean updatePost(Post post);
 
 

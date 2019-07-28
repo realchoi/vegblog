@@ -4,6 +4,9 @@ import com.realchoi.vegblogboot.model.LoginTicket;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
+/**
+ * 登录凭证数据操作接口
+ */
 @Mapper
 @Repository
 public interface LoginTicketDao {

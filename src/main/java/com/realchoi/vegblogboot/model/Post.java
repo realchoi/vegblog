@@ -11,10 +11,10 @@ public class Post {
     private String userId;
     private Date publishTime;
     private Date updateTime;
-    private String summary;
+    private String mdText;
     private String content;
-    private String category;
-    private String tag;
+    private String[] category;
+    private String[] tag;
     private int readTimes;
     private int commentCount;
     private int likeCount;
@@ -60,12 +60,12 @@ public class Post {
         this.updateTime = updateTime;
     }
 
-    public String getSummary() {
-        return summary;
+    public String getMdText() {
+        return mdText;
     }
 
-    public void setSummary(String summary) {
-        this.summary = summary;
+    public void setMdText(String mdText) {
+        this.mdText = mdText;
     }
 
     public String getContent() {
@@ -76,19 +76,19 @@ public class Post {
         this.content = content;
     }
 
-    public String getCategory() {
+    public String[] getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(String[] category) {
         this.category = category;
     }
 
-    public String getTag() {
+    public String[] getTag() {
         return tag;
     }
 
-    public void setTag(String tag) {
+    public void setTag(String[] tag) {
         this.tag = tag;
     }
 
