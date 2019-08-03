@@ -6,6 +6,7 @@ public class PostTag {
     private String id;
     private String postId;
     private String tagId;
+    private String userId;
     private Date insertTime;
 
     public String getId() {
@@ -30,6 +31,14 @@ public class PostTag {
 
     public void setTagId(String tagId) {
         this.tagId = tagId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public Date getInsertTime() {

@@ -17,8 +17,18 @@ public interface PostTagDao {
      *
      * @param postTag 文章标签关系信息
      */
-    @Insert("INSERT INTO post_tag VALUES(#{id}, #{postId}, #{tagId}, #{insertTime})")
+    @Insert("INSERT INTO post_tag VALUES(#{id}, #{postId}, #{tagId}, #{userId}, #{insertTime})")
     void insertPostTag(PostTag postTag);
+
+
+    /**
+     * 根据标签 ID 获取文章-标签关系
+     *
+     * @param tagId 标签 ID
+     * @return
+     */
+    @Select("SELECT * FROM post_tag WHERE tagId = #{tagId} ORDER BY insertTime")
+    List<PostTag> findPostTagsByTagId(@Param("tagId") String tagId);
 
 
     /**
@@ -28,7 +38,7 @@ public interface PostTagDao {
      * @return
      */
     @Select("SELECT * FROM post_tag WHERE postId = #{postId} ORDER BY insertTime")
-    List<PostTag> findPostTagByPostId(@Param("postId") String postId);
+    List<PostTag> findPostTagsByPostId(@Param("postId") String postId);
 
 
     /**

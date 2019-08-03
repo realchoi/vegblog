@@ -14,7 +14,7 @@ public class Post {
     private String mdText;
     private String content;
     private String[] category;
-    private String[] tag;
+    private Tag[] tag;
     private int readTimes;
     private int commentCount;
     private int likeCount;
@@ -84,11 +84,11 @@ public class Post {
         this.category = category;
     }
 
-    public String[] getTag() {
+    public Tag[] getTag() {
         return tag;
     }
 
-    public void setTag(String[] tag) {
+    public void setTag(Tag[] tag) {
         this.tag = tag;
     }
 

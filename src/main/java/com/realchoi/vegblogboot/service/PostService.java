@@ -38,7 +38,20 @@ public class PostService {
      * @return 文章列表
      */
     public List<Post> findPostsPaging(int pageIndex, int pageSize, String userId) {
-        return postDao.findPostsPaging(pageIndex, pageSize, (pageIndex - 1) * pageSize, userId);
+        return postDao.findPostsPaging(pageSize, (pageIndex - 1) * pageSize, userId);
+    }
+
+
+    /**
+     * 分页查询文章列表
+     *
+     * @param postIds 查找的文章 ID 范围
+     * @param pageIndex 页码
+     * @param pageSize  每页数量
+     * @return 文章列表
+     */
+    public List<Post> findPostsFromPostIdListPaging(String postIds, int pageIndex, int pageSize) {
+        return postDao.findPostsFromPostIdListPaging(postIds, pageSize, (pageIndex - 1) * pageSize);
     }
 
 
@@ -100,13 +113,13 @@ public class PostService {
         Post post = postDao.findPostById(id);
         if (post != null) {
             // 查找文章下面的标签
-            List<PostTag> postTagList = postTagDao.findPostTagByPostId(post.getId());
-            String[] tempTags = new String[postTagList.size()];
+            List<PostTag> postTagList = postTagDao.findPostTagsByPostId(post.getId());
+            Tag[] tempTags = new Tag[postTagList.size()];
             for (int i = 0; i < postTagList.size(); i++) {
                 String tagId = postTagList.get(i).getTagId();
                 Tag tag = tagDao.findTagById(tagId);
                 if (tag != null) {
-                    tempTags[i] = tag.getName();
+                    tempTags[i] = tag;
                 }
             }
             post.setTag(tempTags);
@@ -193,32 +206,33 @@ public class PostService {
      * @param method 操作方法（值域：1-新增文章；2-更新文章）
      */
     private void DealWithTag(Post post, int method) {
-        // 文章携带的所有标签的 ID，供删除标签的 SQL 使用
-        List<String> tagIdList = new ArrayList<>();
+        // 文章携带的所有标签的 ID，这样在更新文章-标签关联关系时，这些标签将不会被删除
+        List<String> notDeleteTagIdList = new ArrayList<>();
         // 遍历新发布的文章携带的标签
-        for (String tagName : post.getTag()) {
+        for (Tag tag : post.getTag()) {
             // 查询数据库中是否已存在当前标签，如果存在则返回标签的 ID
-            Tag tempTag = tagDao.findTagByName(tagName);
+            Tag tempTag = tagDao.findTagByName(tag.getName());
             String tagId = "";
             if (tempTag != null) {
                 tagId = tempTag.getId();
-                tagIdList.add(tagId);
             }
             // 如果不存在则新建该标签，并返回新标签的 ID
             else {
                 tempTag = new Tag();
                 tempTag.setId(UUID.randomUUID().toString());
-                tempTag.setName(tagName);
+                tempTag.setName(tag.getName());
                 if (tagDao.insertTag(tempTag)) {
                     tagId = tempTag.getId();
                 }
             }
+            notDeleteTagIdList.add(tagId);
 
             // 新建文章-标签关系
             PostTag postTag = new PostTag();
             postTag.setId(UUID.randomUUID().toString());
             postTag.setTagId(tagId);
             postTag.setPostId(post.getId());
+            postTag.setUserId(post.getUserId());
             postTag.setInsertTime(new Date());
 
             // 更新文章
@@ -235,8 +249,8 @@ public class PostService {
         }
         // 删除文章的标签
         if (method == 2) {
-            if (!tagIdList.isEmpty())
-                postTagDao.deletePostTags(tagIdList, post.getId());
+            if (!notDeleteTagIdList.isEmpty())
+                postTagDao.deletePostTags(notDeleteTagIdList, post.getId());
             else
                 postTagDao.deleteAllPostTags(post.getId());
         }
