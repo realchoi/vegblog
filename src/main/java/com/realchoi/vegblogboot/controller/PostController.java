@@ -50,7 +50,7 @@ public class PostController {
                     postIds.add(postTag.getPostId());
                 }
                 // 查找这些文章
-                String postIdsStr = org.apache.tomcat.util.buf.StringUtils.join(postIds, ',');
+                String postIdsStr = String.join("','", postIds);
                 postList = postService.findPostsFromPostIdListPaging("'" + postIdsStr + "'", pageIndex, pageSize);
             }
         }
@@ -108,7 +108,7 @@ public class PostController {
      * 查询文章详细信息
      *
      * @param id 文章 ID
-     * @return
+     * @return 文章详情
      */
     @GetMapping("/detail")
     public Result findPostById(String id) {
@@ -119,7 +119,7 @@ public class PostController {
      * 编辑文章内容
      *
      * @param post 文章信息
-     * @return
+     * @return 操作结果
      */
     @PostMapping("/edit")
     public Result updatePost(@RequestBody Post post) {
@@ -131,7 +131,7 @@ public class PostController {
      * 删除文章
      *
      * @param post 文章信息
-     * @return
+     * @return 操作结果
      */
     @PostMapping("/delete")
     public Result deletePostById(@RequestBody Post post) {
