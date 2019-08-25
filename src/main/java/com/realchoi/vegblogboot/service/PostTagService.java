@@ -26,4 +26,14 @@ public class PostTagService {
     public List<PostTag> findPostTagsByTagId(String tagId) {
         return this.postTagDao.findPostTagsByTagId(tagId);
     }
+
+    /**
+     * 根据标签名称查找文章-标签关联关系
+     *
+     * @param tagName 标签名称
+     * @return
+     */
+    public List<PostTag> findPostTagsByTagName(String tagName) {
+        return this.postTagDao.findPostTagsByTagName(tagName);
+    }
 }

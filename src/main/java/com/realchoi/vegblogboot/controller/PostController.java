@@ -27,17 +27,17 @@ public class PostController {
     }
 
     @GetMapping("/list")
-    public Result findPostsPaging(int pageIndex, int pageSize, String userId, String tagId) {
+    public Result findPostsPaging(int pageIndex, int pageSize, String userId, String tagName) {
         Result result = new Result();
         List<Post> postList = new ArrayList<>();
         // 如果标签 ID 为空，则仅根据用户进行过滤
-        if (StringUtils.isEmpty(tagId)) {
+        if (StringUtils.isEmpty(tagName)) {
             postList = postService.findPostsPaging(pageIndex, pageSize, userId);
         }
         // 否则将同时根据标签进行过滤
-        else if (!StringUtils.isEmpty(tagId)) {
+        else if (!StringUtils.isEmpty(tagName)) {
             // 先根据当前标签获取文章-标签关联关系
-            List<PostTag> postTags = postTagService.findPostTagsByTagId(tagId);
+            List<PostTag> postTags = postTagService.findPostTagsByTagName(tagName);
             // 最后根据用户 ID 过滤文章-标签关系，得到当前用户下、当前标签下的文章-标签关系
             // 下面使用了 Java8 的 lambda 表达式
             postTags = postTags.stream()
@@ -64,21 +64,21 @@ public class PostController {
      * 获取当前用户、当前标签下的所有文章的数量
      *
      * @param userId 当前用户 ID
-     * @param tagId  当前标签 ID
+     * @param tagName  当前标签名称
      * @return 文章的数量
      */
     @GetMapping("/totalCount")
-    public Result findPoststotalCount(String userId, String tagId) {
+    public Result findPoststotalCount(String userId, String tagName) {
         Result result = new Result();
         int totalCount = 0;
         // 如果标签 ID 为空，则仅根据用户进行过滤
-        if (StringUtils.isEmpty(tagId)) {
+        if (StringUtils.isEmpty(tagName)) {
             totalCount = postService.findPoststotalCount(userId);
         }
         // 否则将同时根据标签进行过滤
-        else if (!StringUtils.isEmpty(tagId)) {
+        else if (!StringUtils.isEmpty(tagName)) {
             // 先根据当前标签获取文章-标签关联关系
-            List<PostTag> postTags = postTagService.findPostTagsByTagId(tagId);
+            List<PostTag> postTags = postTagService.findPostTagsByTagName(tagName);
             // 最后根据用户 ID 过滤文章-标签关系，有多少文章-标签关联关系，当前标签下就有多少篇文章
             // 下面使用了 Java8 的 lambda 表达式
             totalCount = postTags.stream()

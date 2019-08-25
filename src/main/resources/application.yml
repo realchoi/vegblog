@@ -9,7 +9,7 @@ website:
 spring:
   datasource:
     name: vegblogboot
-    url: jdbc:mysql://148.70.40.213:3306/vegblogboot
+    url: jdbc:mysql://148.70.40.213:3306/vegblogboot?serverTimezone=Asia/Shanghai
     username: root
     password: 88888887
     # driver-class-name: com.mysql.cj.jdbc.Driver:

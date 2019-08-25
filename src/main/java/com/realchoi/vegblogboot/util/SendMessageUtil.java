@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 
 /**
@@ -22,7 +23,10 @@ public class SendMessageUtil {
         PrintWriter printWriter = response.getWriter();
         // 消息序列化
         printWriter.print(JSON.toJSONString(object));
+        printWriter.flush();
         printWriter.close();
-        response.flushBuffer();
+        /*OutputStream os = response.getOutputStream();
+        os.write(JSON.toJSONBytes(object));
+        response.flushBuffer();*/
     }
 }

@@ -45,7 +45,7 @@ public class PostService {
     /**
      * 分页查询文章列表
      *
-     * @param postIds 查找的文章 ID 范围
+     * @param postIds   查找的文章 ID 范围
      * @param pageIndex 页码
      * @param pageSize  每页数量
      * @return 文章列表
@@ -167,8 +167,14 @@ public class PostService {
      */
     public Result deletePostById(Post post) {
         Result result = new Result(0, "OK");
+        // 先删除文章
         if (postDao.deletePostById(post.getId())) {
-            result.setData(true);
+            // 然后删除文章的标签关系
+            if (postTagDao.deleteAllPostTags(post.getId())) {
+                // 最后检测该文章下的标签，是否还有文章在使用，如果没有，则删除标签
+                // TODO
+                result.setData(true);
+            }
         } else {
             result.setCode(-1);
             result.setMessage("删除失败。");
@@ -231,7 +237,9 @@ public class PostService {
             PostTag postTag = new PostTag();
             postTag.setId(UUID.randomUUID().toString());
             postTag.setTagId(tagId);
+            postTag.setTagName(tag.getName());
             postTag.setPostId(post.getId());
+            postTag.setPostTitle(post.getTitle());
             postTag.setUserId(post.getUserId());
             postTag.setInsertTime(new Date());
 

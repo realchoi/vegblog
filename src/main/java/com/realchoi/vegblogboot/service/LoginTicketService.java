@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +40,8 @@ public class LoginTicketService {
         // 随机生成 ID
         loginTicket.setId(UUID.randomUUID().toString());
         // 过期时间设为一小时后
-        loginTicket.setExpired(new Date(System.currentTimeMillis() + 60 * 60 * 1000));
+        //loginTicket.setExpired(new Date(System.currentTimeMillis() + 60 * 60 * 1000));
+        loginTicket.setExpired(new Date(LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli() + 60 * 60 * 1000));
         loginTicket.setStatus(0);
         loginTicket.setTicket(UUID.randomUUID().toString());
         this.loginTicketDao.insertLoginTicket(loginTicket);
@@ -58,7 +62,8 @@ public class LoginTicketService {
         LoginTicket loginTicket = this.loginTicketDao.findLoginTicketByUserId(userId);
         loginTicket.setTicket(UUID.randomUUID().toString());
         loginTicket.setStatus(0);
-        loginTicket.setExpired(new Date(System.currentTimeMillis() + 60 * 60 * 1000));
+        //loginTicket.setExpired(new Date(System.currentTimeMillis() + 60 * 60 * 1000));
+        loginTicket.setExpired(new Date(LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli() + 60 * 60 * 1000));
         this.loginTicketDao.updateLoginTicket(loginTicket);
         resultMap.put("code", 0);
         resultMap.put("ticket", loginTicket);

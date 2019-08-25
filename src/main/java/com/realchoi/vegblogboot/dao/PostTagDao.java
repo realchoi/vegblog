@@ -17,7 +17,7 @@ public interface PostTagDao {
      *
      * @param postTag 文章标签关系信息
      */
-    @Insert("INSERT INTO post_tag VALUES(#{id}, #{postId}, #{tagId}, #{userId}, #{insertTime})")
+    @Insert("INSERT INTO post_tag VALUES(#{id}, #{postId}, #{postTitle}, #{tagId}, #{tagName}, #{userId}, #{insertTime})")
     void insertPostTag(PostTag postTag);
 
 
@@ -29,6 +29,16 @@ public interface PostTagDao {
      */
     @Select("SELECT * FROM post_tag WHERE tagId = #{tagId} ORDER BY insertTime")
     List<PostTag> findPostTagsByTagId(@Param("tagId") String tagId);
+
+
+    /**
+     * 根据标签名称获取文章-标签关系
+     *
+     * @param tagName 标签名称
+     * @return
+     */
+    @Select("SELECT * FROM post_tag WHERE tagName = #{tagName} ORDER BY insertTime")
+    List<PostTag> findPostTagsByTagName(@Param("tagName") String tagName);
 
 
     /**
@@ -68,10 +78,10 @@ public interface PostTagDao {
 
 
     /**
-     * 更新文章时，删除文章的全部标签关系
+     * 根据文章 ID 删除该文章的全部文章-标签关系
      *
-     * @param postId
+     * @param postId 文章 ID
      */
     @Delete("DELETE FROM post_tag WHERE postId = #{postId}")
-    void deleteAllPostTags(@Param("postId") String postId);
+    boolean deleteAllPostTags(@Param("postId") String postId);
 }

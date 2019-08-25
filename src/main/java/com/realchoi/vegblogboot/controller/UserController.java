@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
 
@@ -68,7 +70,9 @@ public class UserController {
             // 登录成功后，设置 cookie
             Cookie cookie = new Cookie("ticket", ((LoginTicket) resultMap.get("ticket")).getTicket());
             cookie.setPath("/");
-            cookie.setMaxAge(toIntExact((((LoginTicket) resultMap.get("ticket")).getExpired().getTime() - System.currentTimeMillis()) / 1000));
+            //cookie.setMaxAge(toIntExact((((LoginTicket) resultMap.get("ticket")).getExpired().getTime() - System.currentTimeMillis()) / 1000));
+            cookie.setMaxAge(toIntExact(((LoginTicket) resultMap.get("ticket")).getExpired().getTime() -
+                    LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli()));
             response.addCookie(cookie);
 
             result.setCode(0);
