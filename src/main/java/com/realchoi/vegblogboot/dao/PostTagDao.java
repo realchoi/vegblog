@@ -83,5 +83,5 @@ public interface PostTagDao {
      * @param postId 文章 ID
      */
     @Delete("DELETE FROM post_tag WHERE postId = #{postId}")
-    boolean deleteAllPostTags(@Param("postId") String postId);
+    boolean deletePostTagsByPostId(@Param("postId") String postId);
 }

@@ -1,10 +1,7 @@
 package com.realchoi.vegblogboot.dao;
 
 import com.realchoi.vegblogboot.model.Tag;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -38,4 +35,13 @@ public interface TagDao {
      */
     @Select("SELECT * FROM tag WHERE id = #{id}")
     Tag findTagById(@Param("id") String id);
+
+
+    /**
+     * 根据标签 ID 删除标签
+     *
+     * @param id 标签 ID
+     */
+    @Delete("DELETE FROM tag WHERE id = #{id}")
+    boolean deleteTagById(@Param("id") String id);
 }

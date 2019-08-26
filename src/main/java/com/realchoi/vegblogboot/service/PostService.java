@@ -166,18 +166,32 @@ public class PostService {
      * @return
      */
     public Result deletePostById(Post post) {
-        Result result = new Result(0, "OK");
+        Result result = new Result(-1, "删除失败。", false);
         // 先删除文章
         if (postDao.deletePostById(post.getId())) {
-            // 然后删除文章的标签关系
-            if (postTagDao.deleteAllPostTags(post.getId())) {
-                // 最后检测该文章下的标签，是否还有文章在使用，如果没有，则删除标签
-                // TODO
-                result.setData(true);
+            /*
+             * 然后检测该文章下的标签是否还被其他文章使用，
+             * 如果没有，则删除标签
+             */
+            // 在删除当前文章的文章-标签关系之前，先获取这些文章-标签关系
+            List<PostTag> postTagListOfCurrentPost = postTagDao.findPostTagsByPostId(post.getId());
+            // 然后删除当前文章的文章-标签关系
+            if (postTagDao.deletePostTagsByPostId(post.getId())) {
+                /*
+                 * 获取当前文章使用的所有标签 id，用这些标签 id 再获取其他文章的文章-标签关系，
+                 * 以判断这些标签是否还被其他文章使用（此时当前被删除文章的文章-标签关系已被删除）
+                 */
+                for (PostTag postTag : postTagListOfCurrentPost) {
+                    List<PostTag> otherPostTagList = postTagDao.findPostTagsByTagId(postTag.getTagId());
+                    // 如果没有其他文章使用当前标签，则可以删除当前标签
+                    if (otherPostTagList.isEmpty()) {
+                        tagDao.deleteTagById(postTag.getTagId());
+                    }
+                }
             }
-        } else {
-            result.setCode(-1);
-            result.setMessage("删除失败。");
+            result.setCode(0);
+            result.setMessage("OK");
+            result.setData(true);
         }
         return result;
     }
@@ -260,7 +274,7 @@ public class PostService {
             if (!notDeleteTagIdList.isEmpty())
                 postTagDao.deletePostTags(notDeleteTagIdList, post.getId());
             else
-                postTagDao.deleteAllPostTags(post.getId());
+                postTagDao.deletePostTagsByPostId(post.getId());
         }
     }
 }
