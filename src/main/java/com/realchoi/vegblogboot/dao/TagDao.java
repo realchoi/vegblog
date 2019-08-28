@@ -4,6 +4,8 @@ import com.realchoi.vegblogboot.model.Tag;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 标签数据操作接口
  */
@@ -11,7 +13,16 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TagDao {
     /**
+     * 查找所有的标签
+     *
+     * @return
+     */
+    @Select("SELECT * FROM tag")
+    List<Tag> findAllTags();
+
+    /**
      * 新建标签
+     *
      * @param tag 标签信息
      * @return
      */
@@ -21,6 +32,7 @@ public interface TagDao {
 
     /**
      * 根据标签名称查找标签信息
+     *
      * @param name 标签名称
      * @return
      */
@@ -30,6 +42,7 @@ public interface TagDao {
 
     /**
      * 根据标签 id 查找标签信息
+     *
      * @param id 标签 ID
      * @return
      */
